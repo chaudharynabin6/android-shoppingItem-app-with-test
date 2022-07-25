@@ -2,9 +2,12 @@ package com.chaudharynabin6.shoppinglisttesting
 
 import android.content.Context
 import androidx.room.Room
+import com.chaudharynabin6.shoppinglisttesting.data.local.ShoppingDao
 import com.chaudharynabin6.shoppinglisttesting.data.local.ShoppingItemDatabase
 import com.chaudharynabin6.shoppinglisttesting.data.remote.PixabayAPI
 import com.chaudharynabin6.shoppinglisttesting.other.Constants
+import com.chaudharynabin6.shoppinglisttesting.repositories.DefaultShoppingRepository
+import com.chaudharynabin6.shoppinglisttesting.repositories.ShoppingRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,6 +33,14 @@ object AppModule {
         ).build()
     }
 
+    @Provides
+    @Singleton
+    fun prividesShoppingDao(
+        shoppingItemDatabase: ShoppingItemDatabase
+    ): ShoppingDao {
+        return shoppingItemDatabase.shoppingDao()
+    }
+
     @Singleton
     @Provides
     fun providesPixabayAPI(): PixabayAPI {
@@ -41,5 +52,17 @@ object AppModule {
             .create(
                 PixabayAPI::class.java
             )
+    }
+
+    @Singleton
+    @Provides
+    fun providesDefaultShoppingRepository(
+        shoppingDao: ShoppingDao,
+        pixabayAPI: PixabayAPI
+    ): ShoppingRepository {
+        return DefaultShoppingRepository(
+            shoppingDao = shoppingDao,
+            pixabayAPI = pixabayAPI
+        )
     }
 }
