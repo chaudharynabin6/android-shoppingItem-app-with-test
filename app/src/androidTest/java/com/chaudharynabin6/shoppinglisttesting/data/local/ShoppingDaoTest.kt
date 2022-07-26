@@ -2,6 +2,8 @@ package com.chaudharynabin6.shoppinglisttesting.data.local
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.SmallTest
+import com.chaudharynabin6.shoppinglisttesting.other.launchFragmentInHiltContainer
+import com.chaudharynabin6.shoppinglisttesting.ui.ShoppingFragment
 import com.chaudharynabin6.shoppinglisttesting.utils.getOrAwaitValue
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -152,6 +154,13 @@ class ShoppingDaoTest {
 
        val totalPrice =  dao.observeTotalPrice().getOrAwaitValue()
         assertThat(totalPrice).isEqualTo(2*2f + 3*3f + 5*5f)
+    }
+
+    @Test
+    fun testLaunchFragmentInHiltContainer() {
+        launchFragmentInHiltContainer<ShoppingFragment> {
+
+        }
     }
 }
 
