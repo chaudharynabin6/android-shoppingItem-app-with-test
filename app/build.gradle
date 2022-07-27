@@ -133,5 +133,12 @@ dependencies {
     androidTestImplementation "org.mockito:mockito-core:2.28.2"
     androidTestImplementation 'com.google.dagger:hilt-android-testing:2.40.5'
     kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.40.5'
+//    fragment scenario
     debugImplementation "androidx.fragment:fragment-testing:1.5.0"
+//    for recycler view
+//    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.4.0'
+    androidTestImplementation('androidx.test.espresso:espresso-contrib:3.4.0') {
+        exclude group: 'org.checkerframework', module: 'checker'
+    }
+
 }

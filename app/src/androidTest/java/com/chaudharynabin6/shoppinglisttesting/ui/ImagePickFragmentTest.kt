@@ -4,11 +4,12 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.filters.MediumTest
 import com.chaudharynabin6.shoppinglisttesting.R
+import com.chaudharynabin6.shoppinglisttesting.adapter.ImageAdapter
 import com.chaudharynabin6.shoppinglisttesting.other.launchFragmentInHiltContainer
 import com.chaudharynabin6.shoppinglisttesting.repositories.FakeShoppingRepository
 import com.chaudharynabin6.shoppinglisttesting.ui.viewmodels.ShoppingViewModel
@@ -23,67 +24,51 @@ import org.junit.Test
 import org.mockito.Mockito.verify
 import javax.inject.Inject
 
-
-@ExperimentalCoroutinesApi
 @HiltAndroidTest
 @MediumTest
-class AddShoppingItemTest {
-
+@ExperimentalCoroutinesApi
+class ImagePickFragmentTest {
 
     @get:Rule
-    var hiltRule = HiltAndroidRule(this)
+    var hiltAndroidRule = HiltAndroidRule(this)
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @Inject
+    lateinit var shoppingFragmentFactory: ShoppingFragmentFactory
 
     @Inject
     lateinit var navController: NavController
 
     @Before
     fun setup() {
-        hiltRule.inject()
+        hiltAndroidRule.inject()
     }
 
     @Test
-    fun ivShoppingImage_click__________navigateTo_ImagePickFragment() {
-        launchFragmentInHiltContainer<AddShoppingItem> {
+    fun clickImage_____popBackStack_and_SetImageUrl() {
+        val imageUrl = "test"
+        val testViewModel = ShoppingViewModel(FakeShoppingRepository())
+
+        launchFragmentInHiltContainer<ImagePickFragment>(
+            fragmentFactory = shoppingFragmentFactory
+        ) {
             Navigation.setViewNavController(requireView(), navController)
+            imageAdapter.images = listOf(imageUrl)
+            shoppingViewModel = testViewModel
         }
 
-        onView(withId(R.id.ivShoppingImage)).perform(
-            click()
+        onView(withId(R.id.rvImages)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<ImageAdapter.ImageViewHolder>(
+                0,
+                click()
+            )
         )
-
-        verify(navController).navigate(
-            AddShoppingItemDirections.actionAddShoppingItemToImagePickFragment()
-        )
-    }
-
-    @Test
-    fun ivShoppingImage_click__________setImageUrl_to_empty() {
-
-        val viewModel = ShoppingViewModel(FakeShoppingRepository())
-        launchFragmentInHiltContainer<AddShoppingItem> {
-            shoppingViewModel = viewModel
-            Navigation.setViewNavController(requireView(), navController)
-        }
-
-        pressBack()
-
-        assertThat(viewModel.curImageUrl.getOrAwaitValueAndroidTest()).isEqualTo("")
-
-    }
-
-    @Test
-    fun ivShoppingImage_click__________popUpBackStack() {
-
-        launchFragmentInHiltContainer<AddShoppingItem> {
-            Navigation.setViewNavController(requireView(), navController)
-        }
-
-        pressBack()
-
 
         verify(navController).popBackStack()
+        assertThat(testViewModel.curImageUrl.getOrAwaitValueAndroidTest()).isEqualTo(imageUrl)
     }
+
+
 }

@@ -5,7 +5,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.chaudharynabin6.shoppinglisttesting.data.local.ShoppingItem
 import com.chaudharynabin6.shoppinglisttesting.other.Status
-import com.chaudharynabin6.shoppinglisttesting.utils.getOrAwaitValue
+import com.chaudharynabin6.shoppinglisttesting.utils.getOrAwaitValueAndroidTest
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -43,7 +43,7 @@ class FakeShoppingRepositoryTest {
             )
             fakeShoppingRepository.insertShoppingItem(shoppingItem)
 
-            val shoppingItems = fakeShoppingRepository.observeAllShoppingItems().getOrAwaitValue()
+            val shoppingItems = fakeShoppingRepository.observeAllShoppingItems().getOrAwaitValueAndroidTest()
 
             assertThat(shoppingItems).contains(shoppingItem)
         }
@@ -62,14 +62,14 @@ class FakeShoppingRepositoryTest {
             fakeShoppingRepository.insertShoppingItem(shoppingItem)
 
             val shoppingItemsBeforeDelete =
-                fakeShoppingRepository.observeAllShoppingItems().getOrAwaitValue()
+                fakeShoppingRepository.observeAllShoppingItems().getOrAwaitValueAndroidTest()
 //            shopping item before delete
             assertThat(shoppingItemsBeforeDelete).contains(shoppingItem)
 
             fakeShoppingRepository.deleteShoppingItem(shoppingItem)
 
             val shoppingItemsAfterDeletion =
-                fakeShoppingRepository.observeAllShoppingItems().getOrAwaitValue()
+                fakeShoppingRepository.observeAllShoppingItems().getOrAwaitValueAndroidTest()
 //            shopping item after deletion
             assertThat(shoppingItemsAfterDeletion).doesNotContain(shoppingItem)
 
@@ -114,7 +114,7 @@ class FakeShoppingRepositoryTest {
             fakeShoppingRepository.insertShoppingItem(shoppingItem1)
             fakeShoppingRepository.insertShoppingItem(shoppingItem2)
 
-            val totalPrice = fakeShoppingRepository.observeTotalPrice().getOrAwaitValue()
+            val totalPrice = fakeShoppingRepository.observeTotalPrice().getOrAwaitValueAndroidTest()
 
             assertThat(totalPrice).isEqualTo(2 * 2f + 3 * 3f)
         }

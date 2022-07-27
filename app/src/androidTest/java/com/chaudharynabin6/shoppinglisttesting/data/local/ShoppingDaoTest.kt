@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.SmallTest
 import com.chaudharynabin6.shoppinglisttesting.other.launchFragmentInHiltContainer
 import com.chaudharynabin6.shoppinglisttesting.ui.ShoppingFragment
-import com.chaudharynabin6.shoppinglisttesting.utils.getOrAwaitValue
+import com.chaudharynabin6.shoppinglisttesting.utils.getOrAwaitValueAndroidTest
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -67,7 +67,7 @@ class ShoppingDaoTest {
             )
 
             dao.insertShoppingItem(shoppingItem)
-            val shoppingItems = dao.observeAllShoppingItems().getOrAwaitValue()
+            val shoppingItems = dao.observeAllShoppingItems().getOrAwaitValueAndroidTest()
 
             assertThat(shoppingItems).contains(shoppingItem)
         }
@@ -84,12 +84,12 @@ class ShoppingDaoTest {
         )
 //      insertion test
         dao.insertShoppingItem(shoppingItem)
-        val afterInsertionShoppingItems = dao.observeAllShoppingItems().getOrAwaitValue()
+        val afterInsertionShoppingItems = dao.observeAllShoppingItems().getOrAwaitValueAndroidTest()
         assertThat(afterInsertionShoppingItems).contains(shoppingItem)
 
 //       deletion test
         dao.deleteShoppingItem(shoppingItem)
-        val afterDeletionShoppingItems = dao.observeAllShoppingItems().getOrAwaitValue()
+        val afterDeletionShoppingItems = dao.observeAllShoppingItems().getOrAwaitValueAndroidTest()
         assertThat(afterDeletionShoppingItems).doesNotContain(shoppingItem)
     }
 
@@ -120,7 +120,7 @@ class ShoppingDaoTest {
         dao.insertShoppingItem(item2)
         dao.insertShoppingItem(item3)
 
-        val shoppingItems = dao.observeAllShoppingItems().getOrAwaitValue()
+        val shoppingItems = dao.observeAllShoppingItems().getOrAwaitValueAndroidTest()
 
         assertThat(shoppingItems).containsExactly(item1,item2,item3)
     }
@@ -152,7 +152,7 @@ class ShoppingDaoTest {
         dao.insertShoppingItem(item2)
         dao.insertShoppingItem(item3)
 
-       val totalPrice =  dao.observeTotalPrice().getOrAwaitValue()
+       val totalPrice =  dao.observeTotalPrice().getOrAwaitValueAndroidTest()
         assertThat(totalPrice).isEqualTo(2*2f + 3*3f + 5*5f)
     }
 
