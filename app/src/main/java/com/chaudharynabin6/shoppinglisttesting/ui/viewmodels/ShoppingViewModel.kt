@@ -11,13 +11,16 @@ import com.chaudharynabin6.shoppinglisttesting.other.Event
 import com.chaudharynabin6.shoppinglisttesting.other.Resource
 import com.chaudharynabin6.shoppinglisttesting.repositories.ShoppingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Named
 
 @HiltViewModel
 class ShoppingViewModel @Inject constructor(
-    private val repository: ShoppingRepository,
+    val repository: ShoppingRepository,
+    val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
 
     val shoppingItems = repository.observeAllShoppingItems()
@@ -39,14 +42,13 @@ class ShoppingViewModel @Inject constructor(
     }
 
     fun deleteShoppingItem(shoppingItem: ShoppingItem) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             repository.deleteShoppingItem(shoppingItem)
         }
     }
 
     fun insertShoppingItemIntoDB(shoppingItem: ShoppingItem) {
-        viewModelScope.launch(Dispatchers.IO)
-        {
+        viewModelScope.launch(dispatcher) {
             repository.insertShoppingItem(shoppingItem)
         }
     }
@@ -59,7 +61,7 @@ class ShoppingViewModel @Inject constructor(
             return
         }
 
-        if (name.length > Constants.MAX_PRICE_LENGTH) {
+        if (name.length > Constants.MAX_NAME_LENGTH) {
             _insertShoppingItemStatus.postValue(
                 Event(Resource.error("The name of the item must not exceed ${Constants.MAX_NAME_LENGTH}",
                     null))

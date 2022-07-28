@@ -18,7 +18,7 @@ class FakeShoppingRepository : ShoppingRepository {
         observableTotalPrice.postValue(getTotalPrice(newValue))
     }
 
-    private val observableShoppingItems = MutableLiveData<List<ShoppingItem>>(listOf())
+    private val observableShoppingItems = MutableLiveData<List<ShoppingItem>>()
     private val observableTotalPrice = MutableLiveData<Float>()
 
     private var shouldReturnNetworkError = false

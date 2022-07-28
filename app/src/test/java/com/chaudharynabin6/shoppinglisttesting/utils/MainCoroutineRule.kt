@@ -10,8 +10,7 @@ import org.junit.runner.Description
 //https://github.com/Kotlin/kotlinx.coroutines/blob/master/kotlinx-coroutines-test/MIGRATION.md
 @ExperimentalCoroutinesApi
 class MainCoroutineRule(
-    private val dispatcher: CoroutineDispatcher = StandardTestDispatcher(TestCoroutineScheduler(),
-        "main dispatcher"),
+    private val dispatcher: TestCoroutineDispatcher =TestCoroutineDispatcher(),
 ) : TestWatcher() {
 
     override fun starting(description: Description) {
@@ -22,5 +21,6 @@ class MainCoroutineRule(
     override fun finished(description: Description) {
         super.finished(description)
         Dispatchers.resetMain()
+        dispatcher.cleanupTestCoroutines()
     }
 }
